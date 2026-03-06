@@ -13,12 +13,12 @@ export const Settings = () => {
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-3xl mx-auto"
     >
-      <div className="bg-white/20 dark:bg-slate-900/40 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl rounded-3xl p-6 md:p-8 text-white">
-        <h2 className="text-3xl font-bold mb-8 tracking-tight">Settings</h2>
+      <div className="bg-gradient-to-br from-white/30 via-white/20 to-white/10 dark:from-slate-900/50 dark:via-slate-900/40 dark:to-slate-900/30 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl rounded-3xl p-6 md:p-8 text-white">
+        <h2 className="text-3xl font-bold mb-8 drop-shadow-sm">Settings</h2>
         
         <div className="space-y-6">
           {/* Theme Toggle */}
-          <div className="flex items-center justify-between p-4 bg-white/10 dark:bg-slate-800/40 rounded-2xl border border-white/20 dark:border-white/10">
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-white/20 to-white/5 dark:from-slate-800/50 dark:to-slate-800/20 rounded-2xl border border-white/30 dark:border-white/10">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 dark:bg-black/20 rounded-full">
                 {isDarkMode ? <Moon size={24} /> : <SunMedium size={24} />}
@@ -37,7 +37,7 @@ export const Settings = () => {
           </div>
 
           {/* Unit Toggle */}
-          <div className="flex items-center justify-between p-4 bg-white/10 dark:bg-slate-800/40 rounded-2xl border border-white/20 dark:border-white/10">
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-white/20 to-white/5 dark:from-slate-800/50 dark:to-slate-800/20 rounded-2xl border border-white/30 dark:border-white/10">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 dark:bg-black/20 rounded-full">
                 <Thermometer size={24} />

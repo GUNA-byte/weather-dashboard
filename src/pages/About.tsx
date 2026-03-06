@@ -10,13 +10,13 @@ export const About = () => {
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-3xl mx-auto"
     >
-      <div className="bg-white/20 dark:bg-slate-900/40 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl rounded-3xl p-6 md:p-8 text-white">
+      <div className="bg-gradient-to-br from-white/30 via-white/20 to-white/10 dark:from-slate-900/50 dark:via-slate-900/40 dark:to-slate-900/30 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl rounded-3xl p-6 md:p-8 text-white">
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-4 bg-white/20 dark:bg-black/20 rounded-2xl">
-            <CloudSun size={40} className="text-yellow-300" />
+          <div className="p-4 bg-gradient-to-br from-white/30 to-white/10 dark:from-black/30 dark:to-black/10 rounded-2xl border border-white/20">
+            <CloudSun size={40} className="text-yellow-300 drop-shadow-md" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">About Weather App</h2>
+            <h2 className="text-3xl font-bold drop-shadow-sm">About Weather App</h2>
             <p className="text-white/80 text-lg">Version 1.0.0</p>
           </div>
         </div>
@@ -27,7 +27,7 @@ export const About = () => {
               <Layout size={20} />
               Description
             </h3>
-            <p className="text-white/80 leading-relaxed bg-white/10 dark:bg-slate-800/40 p-4 rounded-2xl border border-white/10">
+            <p className="text-white/80 leading-relaxed bg-gradient-to-r from-white/15 to-white/5 dark:from-slate-800/50 dark:to-slate-800/20 p-4 rounded-2xl border border-white/10">
               A clean, modern, and responsive Weather Dashboard UI built with React. 
               It features a beautiful glassmorphism design, smooth animations, and a seamless 
               user experience. The app provides current weather conditions, hourly forecasts, 
@@ -42,7 +42,7 @@ export const About = () => {
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {['React 19', 'TypeScript', 'Tailwind CSS', 'React Router', 'Lucide Icons', 'Motion'].map((tech) => (
-                <div key={tech} className="bg-white/10 dark:bg-slate-800/40 p-3 rounded-xl border border-white/10 text-center font-medium">
+                <div key={tech} className="bg-gradient-to-br from-white/15 to-white/5 dark:from-slate-800/50 dark:to-slate-800/20 p-3 rounded-xl border border-white/10 text-center font-medium transition-all duration-300 hover:scale-105">
                   {tech}
                 </div>
               ))}
@@ -54,7 +54,7 @@ export const About = () => {
               <Zap size={20} />
               Features
             </h3>
-            <ul className="list-disc list-inside space-y-2 text-white/80 bg-white/10 dark:bg-slate-800/40 p-4 rounded-2xl border border-white/10">
+            <ul className="list-disc list-inside space-y-2 text-white/80 bg-gradient-to-br from-white/15 to-white/5 dark:from-slate-800/50 dark:to-slate-800/20 p-4 rounded-2xl border border-white/10">
               <li>Real-time weather data simulation</li>
               <li>Dark and Light mode support</li>
               <li>Celsius and Fahrenheit toggle</li>

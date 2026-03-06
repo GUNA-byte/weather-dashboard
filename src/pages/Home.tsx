@@ -93,16 +93,28 @@ export const Home = () => {
               transition={{ duration: 0.4 }}
             >
               {/* Main Weather Card */}
-              <div className="bg-white/20 dark:bg-slate-900/40 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between text-white transition-all duration-300 hover:bg-white/25 dark:hover:bg-slate-900/50 gap-8">
+              <div className="bg-gradient-to-br from-white/30 via-white/20 to-white/10 dark:from-slate-900/50 dark:via-slate-900/40 dark:to-slate-900/30 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-2xl rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between text-white transition-all duration-500 hover:shadow-white/10 dark:hover:shadow-black/20 gap-8 group/card">
                 <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1 min-w-0 w-full">
-                  <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-2 break-words w-full line-clamp-2" title={weatherData.city}>{weatherData.city}</h2>
+                  <h2 className="text-4xl md:text-5xl font-bold mb-2 break-words w-full line-clamp-2 drop-shadow-sm" title={weatherData.city}>{weatherData.city}</h2>
                   <p className="text-white/80 font-medium text-lg">{weatherData.date}</p>
                 </div>
                 
                 <div className="flex items-center gap-6 shrink-0">
-                  <WeatherIcon type={weatherData.icon} className="w-20 h-20 md:w-24 md:h-24 text-yellow-300 drop-shadow-lg" />
+                  <motion.div
+                    animate={{ 
+                      y: [0, -10, 0],
+                      rotate: weatherData.icon === 'sun' ? [0, 10, 0] : 0
+                    }}
+                    transition={{ 
+                      duration: 4, 
+                      repeat: Infinity, 
+                      ease: "easeInOut" 
+                    }}
+                  >
+                    <WeatherIcon type={weatherData.icon} className="w-20 h-20 md:w-24 md:h-24 text-yellow-300 drop-shadow-lg" />
+                  </motion.div>
                   <div className="flex flex-col">
-                    <span className="text-7xl md:text-8xl font-black tracking-tighter drop-shadow-md">{convertTemp(weatherData.temp)}°{unit}</span>
+                    <span className="text-7xl md:text-8xl font-black drop-shadow-xl bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">{convertTemp(weatherData.temp)}°{unit}</span>
                     <span className="text-xl md:text-2xl font-medium text-white/90 mt-1">{weatherData.description}</span>
                   </div>
                 </div>

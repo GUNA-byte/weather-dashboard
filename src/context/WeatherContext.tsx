@@ -12,6 +12,7 @@ export interface WeatherData {
   pressure: number;
   feelsLike: number;
   icon: string;
+  isDay: boolean;
   forecast: { day: string; min: number; max: number; icon: string }[];
   hourly: { time: string; temp: number; icon: string }[];
 }
@@ -63,8 +64,16 @@ const mapWeatherCodeToDescription = (code: number) => {
 const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
 
 export const WeatherProvider = ({ children }: { children: ReactNode }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [unit, setUnit] = useState<Unit>('C');
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('weather-theme');
+    if (saved) return saved === 'dark';
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches || false;
+  });
+  
+  const [unit, setUnit] = useState<Unit>(() => {
+    return (localStorage.getItem('weather-unit') as Unit) || 'C';
+  });
+
   const [query, setQuery] = useState('San Francisco');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -72,13 +81,12 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
 
   useEffect(() => {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true);
-    }
-    // Initial fetch
-    handleSearch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    localStorage.setItem('weather-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    localStorage.setItem('weather-unit', unit);
+  }, [unit]);
 
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);
   const toggleUnit = () => setUnit(prev => prev === 'C' ? 'F' : 'C');
@@ -101,9 +109,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
   const handleSearch = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     
-    // Use the current query state, trimming whitespace
     const trimmedQuery = query.trim();
-    
     const valError = validateInput(trimmedQuery);
     if (valError) {
       setValidationError(valError);
@@ -113,10 +119,8 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
     setValidationError('');
     setLoading(true);
     setError('');
-    setWeatherData(null);
     
     try {
-      // 1. Geocoding API
       const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(trimmedQuery)}&count=1&language=en&format=json`);
       if (!geoRes.ok) throw new Error('Network response was not ok');
       const geoData = await geoRes.json();
@@ -128,8 +132,6 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
       }
       
       const city = geoData.results[0];
-      
-      // 2. Weather API
       const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.latitude}&longitude=${city.longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,pressure_msl,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`);
       if (!weatherRes.ok) throw new Error('Network response was not ok');
       const data = await weatherRes.json();
@@ -166,7 +168,6 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         }
       }
       
-      // Format city name nicely
       const locationParts = [city.name];
       if (city.admin1 && city.admin1 !== city.name) locationParts.push(city.admin1);
       if (city.country) locationParts.push(city.country);
@@ -181,6 +182,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         pressure: current.pressure_msl,
         feelsLike: Math.round(current.apparent_temperature),
         icon: mapWeatherCodeToIcon(current.weather_code, current.is_day),
+        isDay: current.is_day === 1,
         forecast,
         hourly: nextHourly
       });
@@ -191,6 +193,11 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <WeatherContext.Provider value={{
